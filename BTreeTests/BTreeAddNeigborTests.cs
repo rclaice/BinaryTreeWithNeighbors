@@ -115,14 +115,14 @@ The function should modify the tree to be:
             root.Right = c;
             b.Left = d;
             b.Right = e;
-            c.Left = g;
-            c.Right = f;
+            c.Left = f;
+            c.Right = g;
             // act
             btree.AddNeighborsToTree(root);
             var nodesWithNeighbors = btree.GetNodesWithNeighbors(root);
             // assert
             nodesWithNeighbors.ShouldNotBeEmpty();
-            nodesWithNeighbors.Count.ShouldBe(3);
+            nodesWithNeighbors.Count.ShouldBe(4);
             nodesWithNeighbors.ShouldContain(n => n.Label == "B");
             nodesWithNeighbors.ShouldContain(n => n.Label == "D");
             nodesWithNeighbors.ShouldContain(n => n.Label == "E");
@@ -136,17 +136,6 @@ The function should modify the tree to be:
         public void UnbalancedTreeShouldHaveFiveNeighbors()
         {
 
-/*
-The function should modify the tree to be:
-
-     A
-    / \
-   B-->C
-  / \   \ 
- D-->E-->F
- \       /  \
-  G----->H--->I
-*/
             // arrange
             var root = new Node{Label = "A"};
             var b = new Node{Label = "B"};
@@ -158,15 +147,21 @@ The function should modify the tree to be:
             var h = new Node{Label = "H"};
             var i = new Node{Label = "I"};
             var btree = new BinaryTree();
+
+            /* a
+              b  c
+             d e  f 
+             g    h i
+            */
             root.Left = b;
+                b.Left = d;
+                    d.Left = g;
+                b.Right = e;
+
             root.Right = c;
-            b.Left = d;
-            b.Right = e;
-            c.Left = g;
-            c.Right = f;
-            d.Right = g;
-            f.Left = h;
-            f.Right = i;
+                c.Right = f;
+                    f.Left = h;
+                    f.Right = i;
             // act
             btree.AddNeighborsToTree(root);
             var nodesWithNeighbors = btree.GetNodesWithNeighbors(root);
@@ -178,6 +173,7 @@ The function should modify the tree to be:
             nodesWithNeighbors.ShouldContain(n => n.Label == "E");
             nodesWithNeighbors.ShouldContain(n => n.Label == "G");
             nodesWithNeighbors.ShouldContain(n => n.Label == "H");
+
             b.Neighbor.Label.ShouldBe("C");
             c.Neighbor.ShouldBe(null);
             d.Neighbor.Label.ShouldBe("E");

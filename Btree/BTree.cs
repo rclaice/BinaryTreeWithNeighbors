@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Btree
 {
@@ -10,24 +11,35 @@ namespace Btree
         public void AddNeighborsToTree(Node startNode)
         {
             Queue<Node> nodesQueue = new Queue<Node>();
-            nodesQueue.Enqueue(startNode);
+            Queue<Node> childrenForLevel = new Queue<Node>();
 
-            while (nodesQueue.Count > 0)
+            nodesQueue.Enqueue(startNode);
+            do 
             {
                 var node = nodesQueue.Dequeue();
-                var next = nodesQueue.Count > 0 ? nodesQueue.Peek() : null;
+
                 Console.WriteLine($"DeQueued {node.Label}");
-                SetNeighbor(node, next);
-                SetNeighbor(node.Left, node.Right);
-                SetNeighbor(node.Right, GetRightNeighbor(next));
-                EnqueueChildren(nodesQueue, node);
+                EnqueueChildren(childrenForLevel, node);
+                if (nodesQueue.Count == 0)
+                    HandleChildren(childrenForLevel);
             }
+            
+            while (nodesQueue.Count > 0);
+            void HandleChildren(Queue<Node> nodes)
+            {
+                while (nodes.Count > 0)
+                {
+                    var child = nodes.Dequeue();
+                    Console.WriteLine($"Handling {child.Label}");
+                    nodesQueue.Enqueue(child);
+                    child.Neighbor = nodes.Count == 0 ? null : nodes.Peek();
+                }
+            }
+
         }
 
-        private static Node GetRightNeighbor(Node next) => 
-            null == next ? null :  (next.Left != null ? next.Left : next.Right);
 
-        private static void EnqueueChildren(Queue<Node> nodesQueue, Node node)
+        private  void EnqueueChildren(Queue<Node> nodesQueue, Node node)
         {
             if (null != node.Left)
             {
@@ -40,14 +52,6 @@ namespace Btree
                 nodesQueue.Enqueue(node.Right);
             }
         }
-
-        private static void SetNeighbor(Node node, Node neighbor) {
-            if (null == node || null == neighbor)
-                return;
-            node.Neighbor = neighbor;
-        }
-
-
 
         public List<Node> GetNodesWithNeighbors(Node node)
         {
