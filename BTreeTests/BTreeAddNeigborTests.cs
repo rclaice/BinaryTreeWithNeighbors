@@ -147,12 +147,12 @@ The function should modify the tree to be:
             var h = new Node{Label = "H"};
             var i = new Node{Label = "I"};
             var btree = new BinaryTree();
-
             /* a
               b  c
              d e  f 
              g    h i
             */
+            
             root.Left = b;
                 b.Left = d;
                     d.Left = g;
