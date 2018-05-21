@@ -137,7 +137,7 @@ The function should modify the tree to be:
         {
 
             // arrange
-            var r = new Node{Label = "A"};
+            var a = new Node{Label = "A"};
             var b = new Node{Label = "B"};
             var c = new Node{Label = "C"};
             var d = new Node{Label = "D"};
@@ -153,18 +153,18 @@ The function should modify the tree to be:
              g    h i
             */
 
-            r.Left = b;
+            a.Left = b;
                 b.Left = d;
                     d.Left = g;
                 b.Right = e;
 
-            r.Right = c;
+            a.Right = c;
                 c.Right = f;
                     f.Left = h;
                     f.Right = i;
             // act
-            btree.AddNeighborsToTree(r);
-            var nodesWithNeighbors = btree.GetNodesWithNeighbors(r);
+            btree.AddNeighborsToTree(a);
+            var nodesWithNeighbors = btree.GetNodesWithNeighbors(a);
             // assert
             nodesWithNeighbors.ShouldNotBeEmpty();
             nodesWithNeighbors.Count.ShouldBe(5);

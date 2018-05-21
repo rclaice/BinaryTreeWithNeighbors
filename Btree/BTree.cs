@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Btree
@@ -38,6 +39,30 @@ namespace Btree
 
         }
 
+        public int GetSumOfNodeValues(Node root)
+        {
+             var stack = new Stack<Node>();
+             stack.Push(root);
+             int sumOfNodeValues = 0;
+             while (stack.Count > 0)
+             {
+                 var node = stack.Pop();
+                 Debug.WriteLine($"Handling {node.Label}");
+                 sumOfNodeValues += node.Value;
+                 PushChildNodes(node);
+             }
+             return sumOfNodeValues;
+
+             void PushChildNodes(Node node)
+             {
+                 if (IsStackableNode(node.Left))    
+                    stack.Push(node.Left);
+                 if (IsStackableNode(node.Right))    
+                    stack.Push(node.Right);
+             }
+             bool IsStackableNode(Node node) => (node != null && node.Value != 0);
+             
+        }
 
         private  void EnqueueChildren(Queue<Node> nodesQueue, Node node)
         {
